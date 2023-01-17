@@ -81,7 +81,16 @@ goarch: amd64
 pkg: github.com/mr-karan/balance
 cpu: 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz
 BenchmarkBalance
-BenchmarkBalance-8       1000000              1074 ns/op               0 B/op          0 allocs/op
+BenchmarkBalance/items-10
+BenchmarkBalance/items-10-8             18100609                65.84 ns/op            0 B/op          0 allocs/op
+BenchmarkBalance/items-100
+BenchmarkBalance/items-100-8             7224061               164.3 ns/op             0 B/op          0 allocs/op
+BenchmarkBalance/items-1000
+BenchmarkBalance/items-1000-8            1000000              1089 ns/op               0 B/op          0 allocs/op
+BenchmarkBalance/items-10000
+BenchmarkBalance/items-10000-8             88384             13776 ns/op               0 B/op          0 allocs/op
+BenchmarkBalance/items-100000
+BenchmarkBalance/items-100000-8             7112            166452 ns/op               0 B/op          0 allocs/op
 PASS
-ok      github.com/mr-karan/balance     1.089s
+ok      github.com/mr-karan/balance     6.367s
 ```
