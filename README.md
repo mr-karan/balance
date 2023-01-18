@@ -36,6 +36,15 @@ import (
 )
 ```
 
+## Algorithm
+
+The algorithm is based on the [Smooth Weighted Round Robin](https://github.com/phusion/nginx/commit/27e94984486058d73157038f7950a0a36ecc6e35) used by NGINX.
+
+> Algorithm is as follows: on each peer selection we increase current_weight
+of each eligible peer by its weight, select peer with greatest current_weight
+and reduce its current_weight by total number of weight points distributed
+among peers.
+
 ## Examples
 
 ### Round Robin
@@ -61,16 +70,6 @@ b.Add("server3", 2)
 ```
 
 The load balancer will distribute the load in the ratio of 5:3:2 among the 3 servers.
-
-### Algorithm
-
-The algorithm is based on the [Smooth Weighted Round Robin](https://github.com/phusion/nginx/commit/27e94984486058d73157038f7950a0a36ecc6e35) used by NGINX.
-
-> Algorithm is as follows: on each peer selection we increase current_weight
-of each eligible peer by its weight, select peer with greatest current_weight
-and reduce its current_weight by total number of weight points distributed
-among peers.
-
 
 ## Benchmark
 
