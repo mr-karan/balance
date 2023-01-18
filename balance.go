@@ -58,14 +58,12 @@ func (b *Balance) Get() string {
 
 	// Loop through the list of items and add the item's weight to the current weight.
 	// Also increment the total weight counter.
+	var max *Item
 	for _, item := range b.items {
 		item.current += item.weight
 		total += item.weight
-	}
 
-	// Select the item with max weight.
-	var max *Item
-	for _, item := range b.items {
+		// Select the item with max weight.
 		if max == nil || item.current > max.current {
 			max = item
 		}
