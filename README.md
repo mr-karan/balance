@@ -30,7 +30,7 @@ import (
     b.Add("c", 2)    
     
     // Get the next item from the load balancer.
-    fmt.Println(b.Next())
+    fmt.Println(b.Get())
 
     // For 10 requests, the output sequence will be: [a b c a a b a c b a]
 )
