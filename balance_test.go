@@ -1,6 +1,7 @@
 package balance_test
 
 import (
+	"errors"
 	"sync"
 	"sync/atomic"
 	"testing"
@@ -30,6 +31,19 @@ func TestBalance(t *testing.T) {
 
 		if result["a"] != 333 || result["b"] != 333 || result["c"] != 333 {
 			t.Error("Wrong counts", result)
+		}
+	})
+
+	t.Run("adding duplicate entry", func(t *testing.T) {
+		bl := balance.NewBalance()
+		err := bl.Add("c", 1)
+		if !errors.Is(err, nil) {
+			t.Error("Wrong error received", err.Error())
+		}
+
+		err = bl.Add("c", 1)
+		if !errors.Is(err, balance.ErrDuplicateID) {
+			t.Error("Wrong error received", err.Error())
 		}
 	})
 
