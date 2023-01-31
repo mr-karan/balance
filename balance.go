@@ -1,8 +1,13 @@
 package balance
 
 import (
+	"errors"
 	"sync"
 )
+
+// ErrAlreadyAdded error is thrown when attempt to add an ID
+// which is already added to the balancer.
+var ErrAlreadyAdded = errors.New("entry already added")
 
 // Balance represents a smooth weighted round-robin load balancer.
 type Balance struct {
@@ -39,10 +44,18 @@ func NewItem(id string, weight int) *Item {
 	}
 }
 
-func (b *Balance) Add(id string, weight int) {
+func (b *Balance) Add(id string, weight int) error {
 	b.Lock()
 	defer b.Unlock()
+	for _, v := range b.items {
+		if v.id == id {
+			return ErrAlreadyAdded
+		}
+	}
+
 	b.items = append(b.items, NewItem(id, weight))
+
+	return nil
 }
 
 func (b *Balance) Get() string {
