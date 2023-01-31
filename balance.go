@@ -5,9 +5,9 @@ import (
 	"sync"
 )
 
-// ErrAlreadyAdded error is thrown when attempt to add an ID
+// ErrDuplicateID error is thrown when attempt to add an ID
 // which is already added to the balancer.
-var ErrAlreadyAdded = errors.New("entry already added")
+var ErrDuplicateID = errors.New("entry already added")
 
 // Balance represents a smooth weighted round-robin load balancer.
 type Balance struct {
@@ -49,7 +49,7 @@ func (b *Balance) Add(id string, weight int) error {
 	defer b.Unlock()
 	for _, v := range b.items {
 		if v.id == id {
-			return ErrAlreadyAdded
+			return ErrDuplicateID
 		}
 	}
 
