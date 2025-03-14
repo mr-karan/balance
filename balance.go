@@ -5,9 +5,13 @@ import (
 	"sync"
 )
 
-// ErrDuplicateID error is thrown when attempt to add an ID
-// which is already added to the balancer.
-var ErrDuplicateID = errors.New("entry already added")
+var (
+	// ErrDuplicateID error is thrown when attempt to add an ID
+	// which is already added to the balancer.
+	ErrDuplicateID = errors.New("entry already added")
+	// ErrIDNotFound is thrown when removing a non-existent ID.
+	ErrIDNotFound = errors.New("id not found")
+)
 
 // Balance represents a smooth weighted round-robin load balancer.
 type Balance struct {
@@ -88,4 +92,19 @@ func (b *Balance) Get() string {
 	max.current -= total
 
 	return max.id
+}
+
+// Remove deletes an item by ID from the balancer.
+func (b *Balance) Remove(id string) error {
+	b.Lock()
+	defer b.Unlock()
+
+	for i, item := range b.items {
+		if item.id == id {
+			b.items = append(b.items[:i], b.items[i+1:]...)
+			return nil
+		}
+	}
+
+	return ErrIDNotFound
 }
