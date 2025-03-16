@@ -93,6 +93,63 @@ func TestBalance(t *testing.T) {
 			t.Error("Wrong counts", result)
 		}
 	})
+
+	// Test remove item.
+	t.Run("remove item", func(t *testing.T) {
+		bl := balance.NewBalance()
+		bl.Add("a", 1)
+		bl.Add("b", 1)
+		bl.Add("c", 1)
+
+		err := bl.Remove("b")
+		if err != nil {
+			t.Error("Expected no error, got", err)
+		}
+
+		ids := bl.ItemIDs()
+		expected := map[string]bool{"a": true, "c": true}
+		for _, id := range ids {
+			if !expected[id] {
+				t.Error("Unexpected ID in list", id)
+			}
+		}
+
+		// Ensure removed item isn't returned by a Get.
+		for i := 0; i < 100; i++ {
+			if bl.Get() == "b" {
+				t.Error("Removed item 'b' still returned by Get")
+			}
+		}
+	})
+
+	// Test remove non-existent item.
+	t.Run("remove non-existent item", func(t *testing.T) {
+		bl := balance.NewBalance()
+		bl.Add("a", 1)
+		err := bl.Remove("x")
+		if !errors.Is(err, balance.ErrIDNotFound) {
+			t.Error("Expected ErrIDNotFound, got", err)
+		}
+	})
+
+	// Test list items ids.
+	t.Run("list items", func(t *testing.T) {
+		bl := balance.NewBalance()
+		bl.Add("x", 3)
+		bl.Add("y", 2)
+
+		ids := bl.ItemIDs()
+		expected := map[string]bool{"x": true, "y": true}
+		for _, id := range ids {
+			if !expected[id] {
+				t.Error("Unexpected ID in list", id)
+			}
+		}
+
+		if len(ids) != 2 {
+			t.Error("Expected 2 items, got", len(ids))
+		}
+	})
 }
 
 func TestBalance_Concurrent(t *testing.T) {
