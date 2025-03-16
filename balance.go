@@ -108,3 +108,15 @@ func (b *Balance) Remove(id string) error {
 
 	return ErrIDNotFound
 }
+
+// ItemIDs returns a list of all item IDs in the balancer.
+func (b *Balance) ItemIDs() []string {
+	b.RLock()
+	defer b.RUnlock()
+
+	ids := make([]string, len(b.items))
+	for i, item := range b.items {
+		ids[i] = item.id
+	}
+	return ids
+}
